@@ -15,6 +15,10 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        mainCharacter.react();
+        mainCharacter.move();
+    }
+    void LateUpdate()
+    {
+        mainCharacter.handleGuns();
     }
 }
