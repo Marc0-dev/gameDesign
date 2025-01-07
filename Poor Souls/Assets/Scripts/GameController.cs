@@ -9,16 +9,16 @@ public class GameController : MonoBehaviour
     void Start()
     {
         mainCharacter =  gameObject.AddComponent<Player>();
-        mainCharacter.instantiate();
+        mainCharacter.Instantiate();
     }
 
     // Update is called once per frame
     void Update()
     {
-        mainCharacter.move();
+        mainCharacter.Move();
     }
     void LateUpdate()
     {
-        mainCharacter.handleGuns();
+        mainCharacter.HandleGuns();
     }
 }

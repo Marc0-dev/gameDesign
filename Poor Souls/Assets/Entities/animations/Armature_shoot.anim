@@ -2883,7 +2883,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.125
-    functionName: decreaseBulletCount
+    functionName: DecreaseBulletCount
     data: 
     objectReferenceParameter: {fileID: -927199367670048503, guid: c1e45225d38e4b24bb0f506e8b06530c,
       type: 3}
@@ -2891,7 +2891,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.8333333
-    functionName: decreaseBulletCount
+    functionName: DecreaseBulletCount
     data: 
     objectReferenceParameter: {fileID: -927199367670048503, guid: c1e45225d38e4b24bb0f506e8b06530c,
       type: 3}

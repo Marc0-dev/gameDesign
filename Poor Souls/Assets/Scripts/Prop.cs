@@ -4,4 +4,11 @@ using UnityEngine;
 
 public abstract class Prop : MonoBehaviour
 {
+    void Start()
+    {
+    }
+    void Update()
+    {
+        
+    }
 }

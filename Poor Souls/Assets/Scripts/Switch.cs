@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Switch : Prop, IInteractive
 {
-    public void interact(){}
+    public void Interact(){}
 }
