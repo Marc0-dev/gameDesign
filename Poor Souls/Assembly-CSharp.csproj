@@ -595,12 +595,6 @@
     <Reference Include="Unity.VSCode.Editor">
         <HintPath>D:\gameDesign\Poor Souls\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Editor">
-        <HintPath>D:\gameDesign\Poor Souls\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Runtime">
-        <HintPath>D:\gameDesign\Poor Souls\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
         <HintPath>D:\gameDesign\Poor Souls\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
@@ -639,9 +633,6 @@
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
         <HintPath>D:\gameDesign\Poor Souls\Library\ScriptAssemblies\UnityEngine.SpatialTracking.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
-        <HintPath>D:\gameDesign\Poor Souls\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
         <HintPath>D:\gameDesign\Poor Souls\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
