@@ -32,11 +32,6 @@ public class Bullet : MonoBehaviour
         }
         Destroy(this.gameObject);
     }
-    void Start()
-    {
-        thisCollider = this.gameObject.GetComponent<Collider>();
-
-    }
     void Update()
     {
         if(hasTarget){

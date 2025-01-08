@@ -5,10 +5,10 @@ using UnityEngine;
 public abstract class Entity : MonoBehaviour
 {
     protected float health = 100;
-    public void TakeDamage(float damageNumber){
+    public virtual void TakeDamage(float damageNumber){
         health -= damageNumber;
         if(IsHealthDepleated() == true){
-            StartCoroutine(Die());
+            Die();
         }
     }
     private bool IsHealthDepleated(){
@@ -17,6 +17,10 @@ public abstract class Entity : MonoBehaviour
         else
             return false;
     }
+    protected virtual void Die(){
+        Destroy(this.gameObject);
+    }
+    /*
     IEnumerator Die(){
         Renderer objectRenderer = GetComponentInChildren<Renderer>();
         Color initColor = objectRenderer.material.color;
@@ -31,4 +35,5 @@ public abstract class Entity : MonoBehaviour
         }
         Destroy(this.gameObject);
     }
+    */
 }

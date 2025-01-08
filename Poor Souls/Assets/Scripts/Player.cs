@@ -31,12 +31,16 @@ public class Player : Entity
     private float verticalRotation = 0;
     private bool special = true;
     PlayerInteract personalSpace;
+    public AudioSource leftBarrelSound;
+    public AudioSource rightBarrelSound;
     public void Instantiate(){
         mainCharacter = GameObject.Find("mainCharacter");
         playerCamera = GameObject.Find("playerCamera").GetComponent<Camera>();
         mouseRotation = GameObject.Find("mouseRotation");
         leftBarrel = GameObject.Find("leftBarrel");
         rightBarrel = GameObject.Find("rightBarrel");
+        leftBarrelSound = leftBarrel.GetComponent<AudioSource>();
+        rightBarrelSound = rightBarrel.GetComponent<AudioSource>();
         controller = mainCharacter.GetComponent<CharacterController>();
         playerAnimator = mainCharacter.GetComponent<Animator>();
         personalSpace = mouseRotation.GetComponent<PlayerInteract>();
@@ -72,10 +76,12 @@ public class Player : Entity
         Bullet firedBullet = null;
         if(barrelTurn == true){
             firedBullet = Instantiate(bullet, leftBarrel.transform.position, leftBarrel.transform.rotation);
+            leftBarrelSound.Play(0);
             barrelTurn = false;
         }
         else if(barrelTurn == false){
             firedBullet = Instantiate(bullet, rightBarrel.transform.position, rightBarrel.transform.rotation);
+            rightBarrelSound.Play(0);
             barrelTurn = true;
         }
         if (Physics.Raycast(ray, out hitEntity)) {

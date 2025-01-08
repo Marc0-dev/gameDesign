@@ -4,8 +4,6 @@ using UnityEngine;
 
 public abstract class Ostile : Entity
 {
-    private float damage;
-    private float crit;
     public abstract void Move();
     public abstract void Attack();
 }

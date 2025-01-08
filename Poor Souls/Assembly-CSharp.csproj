@@ -42,6 +42,7 @@
      <Compile Include="Assets\Scripts\Entity.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\IInteractive.cs" />
+     <Compile Include="Assets\Scripts\Manta.cs" />
      <Compile Include="Assets\Scripts\Ostile.cs" />
      <Compile Include="Assets\Scripts\Passive.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
