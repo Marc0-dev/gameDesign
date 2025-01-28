@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Animations;
+//using UnityEngine.Animations;
 using UnityEngine.SceneManagement;
 public class Player : Entity
 {
