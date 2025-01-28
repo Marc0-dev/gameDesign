@@ -5,52 +5,50 @@ using System.Runtime.ExceptionServices;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.SceneManagement;
 public class Player : Entity
 {
-    private float damage = 10;
+    [SerializeField] private float damage = 10;
     private CharacterController controller;
     private Vector3 verticalVelocity;
     private bool grounded;
-    private float playerSpeed = 15f;
+    [SerializeField] private float playerSpeed = 10f;
     private float jumpHeight = 5f;
     private float gravity = -25f;
     private Vector3 inputVector = Vector3.zero;
     private float lookLimit = 45;
-    private GameObject mainCharacter;
     public Camera playerCamera;
     private GameObject mouseRotation;
     private Animator playerAnimator;
     public GameObject leftBarrel;
     public GameObject rightBarrel;
-    public Bullet bullet;
+    public GameObject bullet;
     private bool barrelTurn = true;
     private static int bulletCap = 30;
     private int bulletCount = bulletCap;
     private float mouseSensitivity = 2.0f;
-    private float horizontalRotation = 0;
     private float verticalRotation = 0;
-    private bool special = true;
     PlayerInteract personalSpace;
     public AudioSource leftBarrelSound;
     public AudioSource rightBarrelSound;
-    public void Instantiate(){
-        mainCharacter = GameObject.Find("mainCharacter");
+    public AudioSource hitSound;
+    void Start(){
         playerCamera = GameObject.Find("playerCamera").GetComponent<Camera>();
         mouseRotation = GameObject.Find("mouseRotation");
         leftBarrel = GameObject.Find("leftBarrel");
         rightBarrel = GameObject.Find("rightBarrel");
         leftBarrelSound = leftBarrel.GetComponent<AudioSource>();
         rightBarrelSound = rightBarrel.GetComponent<AudioSource>();
-        controller = mainCharacter.GetComponent<CharacterController>();
-        playerAnimator = mainCharacter.GetComponent<Animator>();
+        hitSound = this.gameObject.GetComponent<AudioSource>();
+        controller = this.gameObject.GetComponent<CharacterController>();
+        playerAnimator = this.gameObject.GetComponent<Animator>();
         personalSpace = mouseRotation.GetComponent<PlayerInteract>();
         controller.detectCollisions = true;
     }
     public void Move(){
-        horizontalRotation += mouseSensitivity * Input.GetAxis("Mouse X");
         verticalRotation += mouseSensitivity * Input.GetAxis("Mouse Y");
         verticalRotation = Mathf.Clamp(verticalRotation, -lookLimit, lookLimit);
-        mouseRotation.transform.rotation = Quaternion.Euler(-verticalRotation, horizontalRotation, 0);
+        mouseRotation.transform.localRotation = Quaternion.Euler(-verticalRotation, 0, 0);
         grounded = controller.isGrounded;
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right  = transform.TransformDirection(Vector3.right);
@@ -73,51 +71,23 @@ public class Player : Entity
         Ray ray;
         Vector3 screenCenter = new Vector3(Screen.width/2, Screen.height/2);
         ray = playerCamera.ScreenPointToRay(screenCenter);
-        Bullet firedBullet = null;
+        GameObject firedBullet = null;
         if(barrelTurn == true){
-            firedBullet = Instantiate(bullet, leftBarrel.transform.position, leftBarrel.transform.rotation);
             leftBarrelSound.Play(0);
+            firedBullet = Instantiate(bullet, leftBarrel.transform.position, leftBarrel.transform.rotation);
             barrelTurn = false;
         }
         else if(barrelTurn == false){
-            firedBullet = Instantiate(bullet, rightBarrel.transform.position, rightBarrel.transform.rotation);
             rightBarrelSound.Play(0);
+            firedBullet = Instantiate(bullet, rightBarrel.transform.position, rightBarrel.transform.rotation);
             barrelTurn = true;
         }
         if (Physics.Raycast(ray, out hitEntity)) {
-            firedBullet.Move(hitEntity.point, hitEntity.collider, damage);
+            firedBullet.GetComponent<Bullet>().Move(hitEntity.point, hitEntity.collider, damage);
         }
         else{
-            firedBullet.Move(damage);
+            firedBullet.GetComponent<Bullet>().Move(damage);
         }
-    }
-    private void ShootSpecial(){
-        RaycastHit hitEntity;
-        Ray ray;
-        Vector3 screenCenter = new Vector3(Screen.width/2, Screen.height/2);
-        ray = playerCamera.ScreenPointToRay(screenCenter);
-        Bullet firedBulletLeft = null;
-        Bullet firedBulletRight = null;
-        Vector3 specialScale = new Vector3(20, 20, 20);
-        float specialDamage = damage * 1.5f;
-        firedBulletLeft = Instantiate(bullet, leftBarrel.transform.position, leftBarrel.transform.rotation);
-        firedBulletRight = Instantiate(bullet, rightBarrel.transform.position, rightBarrel.transform.rotation);
-        firedBulletLeft.transform.localScale = specialScale;
-        firedBulletRight.transform.localScale = specialScale;
-        if (Physics.Raycast(ray, out hitEntity)) {
-            firedBulletLeft.Move(hitEntity.point, hitEntity.collider, specialDamage);
-            firedBulletRight.Move(hitEntity.point, hitEntity.collider, specialDamage);
-        }
-        else{
-            firedBulletLeft.Move(damage);
-            firedBulletRight.Move(damage);
-        }
-        special = false;
-        StartCoroutine(SpecialCooldown());
-    }
-    IEnumerator SpecialCooldown(){
-        yield return new WaitForSeconds(60);
-        special = true;
     }
     IEnumerator ChangeAmmoAlphaValue(){
         Renderer ammoRendererLeft = GameObject.Find("leftSphere").GetComponent<Renderer>();
@@ -132,12 +102,6 @@ public class Player : Entity
         ammoRendererLeft.material.color = ammoColor;
         ammoRendererRight.material.color = ammoColor;
         yield return null;
-    }
-    private void CheckSpecial(){
-        if(special == true){
-            Debug.Log("specialInbound");
-            ShootSpecial();
-        }
     }
     private void DecreaseBulletCount(){
         if(bulletCount > 0){
@@ -156,18 +120,28 @@ public class Player : Entity
         if(Input.GetButton("Fire1")){
             playerAnimator.SetBool("fire", true);
         }
-        else if(Input.GetButton("Fire2")){
-            playerAnimator.SetTrigger("special");
-        }
         else if(Input.GetKeyDown(KeyCode.R))
             playerAnimator.SetTrigger("reload");
         else if(Input.GetKeyDown(KeyCode.E))
             personalSpace.Interact();  
     }
+    public override void TakeDamage(float damageNumber)
+    {
+        base.TakeDamage(damageNumber);
+        hitSound.Play(0);
+    }
+    public override void Die()
+    {
+        SceneManager.LoadScene(1);
+    }
     public void SetDamage(float damage_){damage = damage_;}
+    public Vector3 GetPosition(){return this.gameObject.transform.position;}
+    public void SetPosition(Vector3 position){this.gameObject.transform.position = position;}
     public float GetDamage(){return damage;}
     public void SetPlayerSpeed(float playerSpeed_){playerSpeed = playerSpeed_;}
     public float GetPlayerSpeed(){return playerSpeed;}
     public void SetHealth(float health_){health = health_;}
     public float GetHealth(){return health;}
+    public float GetBulletCount(){return bulletCount;}
+    public float GetBulletCap(){return bulletCap;}
 }

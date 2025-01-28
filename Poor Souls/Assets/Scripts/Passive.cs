@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class Passive : Entity, IInteractive
 {
+    
     public void Interact(){}
 }

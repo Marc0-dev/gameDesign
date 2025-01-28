@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,21 +10,13 @@ public class Collectable : Prop, IInteractive
     private Renderer powerUpRenderer;
     private Color powerUpColor;
     Player mainCharacter;
-    private float incrementPercent = 0.5f;
-    private struct Old{
-        public float speed;
-        public float damage;
-    }
-    private struct Boosted{
-        public float speed;
-        public float damage;
-    }
-    Old oldValues;
-    Boosted boostedValues;
+    CollectableController controller;
+    private CollectableSpawnPoint spawnPoint;
+    private CharacterUI characterUI;
     public void Initialize(){
         powerUpRenderer = this.gameObject.GetComponent<Renderer>();
         powerUpColor = powerUpRenderer.material.color;
-        Random.InitState((int)System.DateTime.UtcNow.Ticks);
+        UnityEngine.Random.InitState((int)Guid.NewGuid().GetHashCode());
         int randomType = UnityEngine.Random.Range(0,3);
         switch(randomType){
             case 0:
@@ -49,13 +42,10 @@ public class Collectable : Prop, IInteractive
     }
     void Start()
     {
+        controller = GameObject.Find("Collectable Controller").GetComponent<CollectableController>();
         mainCharacter = GameObject.Find("mainCharacter").GetComponent<Player>();
-        oldValues = new Old();
-        boostedValues = new Boosted();
-        oldValues.speed = mainCharacter.GetComponent<Player>().GetPlayerSpeed();
-        oldValues.damage = mainCharacter.GetComponent<Player>().GetDamage();
-        boostedValues.speed = oldValues.speed + oldValues.speed*incrementPercent;
-        boostedValues.damage = oldValues.damage + oldValues.damage*incrementPercent;
+        characterUI = GameObject.Find("UI Controller").GetComponent<CharacterUI>();
+        spawnPoint = gameObject.GetComponentInParent<CollectableSpawnPoint>();
         Initialize();
     }
     public void Interact(){
@@ -64,17 +54,22 @@ public class Collectable : Prop, IInteractive
     IEnumerator ApplyPowerUp(PowerUp choice){
         Collider collectableCollider = this.gameObject.GetComponent<Collider>();
         collectableCollider.enabled = false;
-        if(choice == PowerUp.speed){
-            mainCharacter.SetPlayerSpeed(boostedValues.speed);
+        spawnPoint.replaceTimerStart();
+        if(choice == PowerUp.speed && CollectableController.activeSpeedBoost == false){
+            mainCharacter.SetPlayerSpeed(controller.getNewSpeed());
             powerUpRenderer.enabled = false;
+            characterUI.ToggleSpeedIcon(true);
             yield return new WaitForSeconds(30);
-            mainCharacter.SetPlayerSpeed(oldValues.speed);
+            characterUI.ToggleSpeedIcon(false);
+            mainCharacter.SetPlayerSpeed(controller.getOldSpeed());
         }
-        else if(choice == PowerUp.damage){
-            mainCharacter.SetDamage(boostedValues.damage);
+        else if(choice == PowerUp.damage && CollectableController.activeDamageBoost == false){
+            mainCharacter.SetDamage(controller.getNewDamage());
             powerUpRenderer.enabled = false;
+            characterUI.ToggleDamageIcon(true);
             yield return new WaitForSeconds(30);
-            mainCharacter.SetDamage(oldValues.damage); 
+            characterUI.ToggleDamageIcon(false);
+            mainCharacter.SetDamage(controller.getOldDamage()); 
         }
         else if(choice == PowerUp.health){
             float currentHealth = mainCharacter.GetHealth();

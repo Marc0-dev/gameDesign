@@ -11,13 +11,13 @@ public abstract class Entity : MonoBehaviour
             Die();
         }
     }
-    private bool IsHealthDepleated(){
+    protected bool IsHealthDepleated(){
         if(health <= 0)
             return true;
         else
             return false;
     }
-    protected virtual void Die(){
+    public virtual void Die(){
         Destroy(this.gameObject);
     }
     /*

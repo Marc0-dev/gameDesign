@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0a9b283ddcce5914482fdfebfcba3c85
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - manta: {fileID: 4001823292112159551, guid: ccd2aad169b3cc449974b8720eb4c291, type: 3}
+  - worm: {fileID: 6191080523630527211, guid: c97afc7849d20a741ac8dec84ebd524b, type: 3}
+  - bell: {fileID: 4101722240594908423, guid: eb6128356c08f4a46b92653949bd3a92, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
