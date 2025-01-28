@@ -63,11 +63,15 @@ public class CharacterUI : MonoBehaviour
     public void TogglePauseMenu(){
         if(pauseMenu.alpha == 0f){
             pauseMenu.alpha = 1f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             pauseMenu.interactable = true;
             Time.timeScale = 0;
         }
         else if(pauseMenu.alpha == 1f){
             pauseMenu.alpha = 0f;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             pauseMenu.interactable = false;
             Time.timeScale = 1;
         }
